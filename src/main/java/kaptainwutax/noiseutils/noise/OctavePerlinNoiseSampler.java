@@ -1,6 +1,6 @@
 package kaptainwutax.noiseutils.noise;
 
-import kaptainwutax.biomeutils.MathHelper;
+import kaptainwutax.noiseutils.MathHelper;
 import kaptainwutax.seedutils.lcg.LCG;
 import kaptainwutax.seedutils.lcg.rand.JRand;
 import kaptainwutax.seedutils.mc.ChunkRand;

@@ -1,7 +1,7 @@
 package kaptainwutax.noiseutils.terrain;
 
 import kaptainwutax.biomeutils.Biome;
-import kaptainwutax.biomeutils.MathHelper;
+import kaptainwutax.noiseutils.MathHelper;
 import kaptainwutax.noiseutils.ChunkGenerator;
 import kaptainwutax.noiseutils.noise.NoiseSampler;
 import kaptainwutax.noiseutils.noise.OctavePerlinNoiseSampler;
