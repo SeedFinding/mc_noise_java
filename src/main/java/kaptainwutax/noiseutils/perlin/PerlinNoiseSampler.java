@@ -1,6 +1,9 @@
-package kaptainwutax.noiseutils.noise;
+package kaptainwutax.noiseutils.perlin;
 
 import kaptainwutax.seedutils.lcg.rand.JRand;
+
+import static kaptainwutax.noiseutils.utils.MathHelper.GRADIENTS;
+import static kaptainwutax.noiseutils.utils.MathHelper.dot;
 
 public class PerlinNoiseSampler {
 
@@ -54,7 +57,7 @@ public class PerlinNoiseSampler {
 	}
 
 	private static double grad(int hash, double x, double y, double z) {
-		return SimplexNoiseSampler.dot(SimplexNoiseSampler.GRADIENTS[hash & 15], x, y, z);
+		return dot(GRADIENTS[hash & 15], x, y, z);
 	}
 
 	private int getGradient(int hash) {

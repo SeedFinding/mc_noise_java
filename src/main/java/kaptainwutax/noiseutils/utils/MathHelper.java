@@ -1,9 +1,18 @@
-package kaptainwutax.noiseutils;
+package kaptainwutax.noiseutils.utils;
 
 public class MathHelper {
+	public static final int[][] GRADIENTS = new int[][] {
+			{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
+			{0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}, {1, 1, 0}, {0, -1, 1}, {-1, 1, 0}, {0, -1, -1}
+	};
+
 	public static long lfloor(double d) {
 		long l = (long)d;
 		return d < (double)l ? l - 1L : l;
+	}
+
+	public static double dot(int[] g, double x, double y, double z) {
+		return (double)g[0] * x + (double)g[1] * y + (double)g[2] * z;
 	}
 
 	public static double lerp(double delta, double first, double second) {

@@ -1,6 +1,8 @@
-package kaptainwutax.noiseutils.noise;
+package kaptainwutax.noiseutils.perlin;
 
-import kaptainwutax.noiseutils.MathHelper;
+
+import kaptainwutax.noiseutils.noise.NoiseSampler;
+import kaptainwutax.noiseutils.utils.MathHelper;
 import kaptainwutax.seedutils.lcg.LCG;
 import kaptainwutax.seedutils.lcg.rand.JRand;
 import kaptainwutax.seedutils.mc.ChunkRand;
@@ -105,7 +107,7 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 	}
 
 	public static double maintainPrecision(double d) {
-		return d - (double)MathHelper.lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
+		return d - (double) MathHelper.lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
 	}
 
 	@Override

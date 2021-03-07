@@ -1,5 +1,6 @@
 package kaptainwutax.noiseutils.noise;
 
+import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
 import kaptainwutax.seedutils.mc.ChunkRand;
 
 import java.util.List;

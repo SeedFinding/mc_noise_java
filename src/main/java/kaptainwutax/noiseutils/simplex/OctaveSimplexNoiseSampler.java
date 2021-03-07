@@ -1,5 +1,6 @@
-package kaptainwutax.noiseutils.noise;
+package kaptainwutax.noiseutils.simplex;
 
+import kaptainwutax.noiseutils.noise.NoiseSampler;
 import kaptainwutax.seedutils.lcg.rand.JRand;
 
 public class OctaveSimplexNoiseSampler implements NoiseSampler {

@@ -1,13 +1,13 @@
-package kaptainwutax.noiseutils.noise;
+package kaptainwutax.noiseutils.simplex;
 
 import kaptainwutax.seedutils.lcg.rand.JRand;
 
+import static kaptainwutax.noiseutils.utils.MathHelper.GRADIENTS;
+import static kaptainwutax.noiseutils.utils.MathHelper.dot;
+
 public class SimplexNoiseSampler {
 
-	protected static final int[][] GRADIENTS = new int[][] {
-			{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
-			{0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}, {1, 1, 0}, {0, -1, 1}, {-1, 1, 0}, {0, -1, -1}
-	};
+
 
 	private static final double SQRT_3 = Math.sqrt(3.0D);
 	private static final double SKEW_FACTOR_2D = 0.5D * (SQRT_3 - 1.0D); // also known as F2 // 0.3660254037844386D
@@ -41,9 +41,7 @@ public class SimplexNoiseSampler {
 		return this.permutations[hash & 255];
 	}
 
-	protected static double dot(int[] gArr, double x, double y, double z) {
-		return (double)gArr[0] * x + (double)gArr[1] * y + (double)gArr[2] * z;
-	}
+
 
 	private double grad(int hash, double x, double y, double z, double d) {
 		double contribution = d - x * x - y * y - z * z;
