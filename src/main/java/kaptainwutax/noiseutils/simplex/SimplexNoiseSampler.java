@@ -1,59 +1,20 @@
 package kaptainwutax.noiseutils.simplex;
 
+import kaptainwutax.noiseutils.noise.Noise;
 import kaptainwutax.seedutils.lcg.rand.JRand;
 
-import static kaptainwutax.noiseutils.utils.MathHelper.GRADIENTS;
-import static kaptainwutax.noiseutils.utils.MathHelper.dot;
+import static kaptainwutax.noiseutils.utils.MathHelper.*;
 
-public class SimplexNoiseSampler {
-
-
+public class SimplexNoiseSampler extends Noise {
 
 	private static final double SQRT_3 = Math.sqrt(3.0D);
 	private static final double SKEW_FACTOR_2D = 0.5D * (SQRT_3 - 1.0D); // also known as F2 // 0.3660254037844386D
 	private static final double UNSKEW_FACTOR_2D = (3.0D - SQRT_3) / 6.0D; // also known as G2 // 0.21132486540518713D
 	private static final double F3 = 0.16666666666666666D;
 	private static final double G3 = 0.3333333333333333D;
-	private final int[] permutations = new int[512];
-	public final double originX;
-	public final double originY;
-	public final double originZ;
 
 	public SimplexNoiseSampler(JRand rand) {
-		this.originX = rand.nextDouble() * 256.0D;
-		this.originY = rand.nextDouble() * 256.0D;
-		this.originZ = rand.nextDouble() * 256.0D;
-
-		int j;
-
-		for(j = 0; j < 256; this.permutations[j] = j++) {
-		}
-
-		for(j = 0; j < 256; ++j) {
-			int k = rand.nextInt(256 - j);
-			int l = this.permutations[j];
-			this.permutations[j] = this.permutations[k + j];
-			this.permutations[k + j] = l;
-		}
-	}
-
-	private int getGradient(int hash) {
-		return this.permutations[hash & 255];
-	}
-
-
-
-	private double grad(int hash, double x, double y, double z, double d) {
-		double contribution = d - x * x - y * y - z * z;
-		double result;
-		if (contribution < 0.0D) {
-			result = 0.0D;
-		} else {
-			contribution *= contribution;
-			result = contribution * contribution * dot(GRADIENTS[hash], x, y, z);
-		}
-
-		return result;
+		super(rand);
 	}
 
 	public double sample2D(double x, double y) {
@@ -82,12 +43,12 @@ public class SimplexNoiseSampler {
 		double y3 = y0 - 1.0D + 2.0D * UNSKEW_FACTOR_2D;
 		int ii = hairyX & 255;
 		int jj = hairyZ & 255;
-		int gi0 = this.getGradient(ii + this.getGradient(jj)) % 12;
-		int gi1 = this.getGradient(ii + offsetSecondCornerX + this.getGradient(jj + offsetSecondCornerZ)) % 12;
-		int gi2 = this.getGradient(ii + 1 + this.getGradient(jj + 1)) % 12;
-		double t0 = this.grad(gi0, x0, y0, 0.0D, 0.5D);
-		double t1 = this.grad(gi1, x1, y1, 0.0D, 0.5D);
-		double t2 = this.grad(gi2, x3, y3, 0.0D, 0.5D);
+		int gi0 = this.lookup(ii + this.lookup(jj)) % 12;
+		int gi1 = this.lookup(ii + offsetSecondCornerX + this.lookup(jj + offsetSecondCornerZ)) % 12;
+		int gi2 = this.lookup(ii + 1 + this.lookup(jj + 1)) % 12;
+		double t0 = this.cornerNoise3d(gi0, x0, y0, 0.0D, 0.5D);
+		double t1 = this.cornerNoise3d(gi1, x1, y1, 0.0D, 0.5D);
+		double t2 = this.cornerNoise3d(gi2, x3, y3, 0.0D, 0.5D);
 		return 70.0D * (t0 + t1 + t2);
 	}
 
@@ -168,20 +129,28 @@ public class SimplexNoiseSampler {
 		int ii = i & 255;
 		int jj = j & 255;
 		int kk = k & 255;
-		int gi0 = this.getGradient(ii + this.getGradient(jj + this.getGradient(kk))) % 12;
-		int gi1 = this.getGradient(ii + i1 + this.getGradient(jj + j1 + this.getGradient(kk + k1))) % 12;
-		int gi2 = this.getGradient(ii + i2 + this.getGradient(jj + j2 + this.getGradient(kk + k2))) % 12;
-		int gi3 = this.getGradient(ii + 1 + this.getGradient(jj + 1 + this.getGradient(kk + 1))) % 12;
-		double t0 = this.grad(gi0, x0, y0, z0, 0.6D);
-		double t1 = this.grad(gi1, x1, y1, z1, 0.6D);
-		double t2 = this.grad(gi2, x2, y2, z2, 0.6D);
-		double t3 = this.grad(gi3, bj, bk, bl, 0.6D);
+		int gi0 = this.lookup(ii + this.lookup(jj + this.lookup(kk))) % 12;
+		int gi1 = this.lookup(ii + i1 + this.lookup(jj + j1 + this.lookup(kk + k1))) % 12;
+		int gi2 = this.lookup(ii + i2 + this.lookup(jj + j2 + this.lookup(kk + k2))) % 12;
+		int gi3 = this.lookup(ii + 1 + this.lookup(jj + 1 + this.lookup(kk + 1))) % 12;
+		double t0 = this.cornerNoise3d(gi0, x0, y0, z0, 0.6D);
+		double t1 = this.cornerNoise3d(gi1, x1, y1, z1, 0.6D);
+		double t2 = this.cornerNoise3d(gi2, x2, y2, z2, 0.6D);
+		double t3 = this.cornerNoise3d(gi3, bj, bk, bl, 0.6D);
 		return 32.0D * (t0 + t1 + t2 + t3);
 	}
 
-	public static int floor(double d) {
-		int i = (int)d;
-		return d < (double)i ? i - 1 : i;
+	private double cornerNoise3d(int hash, double x, double y, double z, double d) {
+		double contribution = d - x * x - y * y - z * z;
+		double result;
+		if (contribution < 0.0D) {
+			result = 0.0D;
+		} else {
+			contribution *= contribution;
+			result = contribution * contribution * grad(hash,x,y,z);
+		}
+
+		return result;
 	}
 
 }

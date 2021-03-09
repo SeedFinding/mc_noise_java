@@ -20,13 +20,13 @@ public class OctaveSimplexNoiseSampler implements NoiseSampler {
 		return this.sample(x, y, false);
 	}
 
-	public double sample(double x, double y, boolean bl) {
+	public double sample(double x, double y, boolean useRandomOffset) {
 		double noise = 0.0D;
 		// contribution of each octaves to the final noise, diminished by a factor of 2 (or increased by factor of 0.5)
 		double persistence = 1.0D;
 
 		for (int i = 0; i < this.octaveCount; ++i) {
-			noise += this.octaveSamplers[i].sample2D(x * persistence + (bl ? this.octaveSamplers[i].originX : 0.0D), y * persistence + (bl ? this.octaveSamplers[i].originY : 0.0D)) / persistence;
+			noise += this.octaveSamplers[i].sample2D(x * persistence + (useRandomOffset ? this.octaveSamplers[i].originX : 0.0D), y * persistence + (useRandomOffset ? this.octaveSamplers[i].originY : 0.0D)) / persistence;
 			persistence /= 2.0D;
 		}
 
@@ -34,7 +34,7 @@ public class OctaveSimplexNoiseSampler implements NoiseSampler {
 	}
 
 	@Override
-	public double sample(double x, double y, double d, double e) {
+	public double sample(double x, double y, double notUsed, double notUsed2) {
 		return this.sample(x, y, true) * 0.55D;
 	}
 }

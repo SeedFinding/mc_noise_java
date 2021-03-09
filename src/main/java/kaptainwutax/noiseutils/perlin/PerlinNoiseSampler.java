@@ -1,106 +1,53 @@
 package kaptainwutax.noiseutils.perlin;
 
+import kaptainwutax.noiseutils.noise.Noise;
 import kaptainwutax.seedutils.lcg.rand.JRand;
 
-import static kaptainwutax.noiseutils.utils.MathHelper.GRADIENTS;
-import static kaptainwutax.noiseutils.utils.MathHelper.dot;
+import static kaptainwutax.noiseutils.utils.MathHelper.*;
 
-public class PerlinNoiseSampler {
-
-	private final byte[] permutations;
-	public final double originX;
-	public final double originY;
-	public final double originZ;
+public class PerlinNoiseSampler extends Noise {
 
 	public PerlinNoiseSampler(JRand rand) {
-		this.originX = rand.nextDouble() * 256.0D;
-		this.originY = rand.nextDouble() * 256.0D;
-		this.originZ = rand.nextDouble() * 256.0D;
-		this.permutations = new byte[256];
-
-		int j;
-		for(j = 0; j < 256; ++j) {
-			this.permutations[j] = (byte)j;
-		}
-
-		for(j = 0; j < 256; ++j) {
-			int k = rand.nextInt(256 - j);
-			byte b = this.permutations[j];
-			this.permutations[j] = this.permutations[j + k];
-			this.permutations[j + k] = b;
-		}
-
+		super(rand);
 	}
 
-	public double sample(double x, double y, double z, double d, double e) {
-		double f = x + this.originX;
-		double g = y + this.originY;
-		double h = z + this.originZ;
-		int i = floor(f);
-		int j = floor(g);
-		int k = floor(h);
-		double l = f - (double)i;
-		double m = g - (double)j;
-		double n = h - (double)k;
-		double o = perlinFade(l);
-		double p = perlinFade(m);
-		double q = perlinFade(n);
-		double t;
-		if (d != 0.0D) {
-			double r = Math.min(e, m);
-			t = (double)floor(r / d) * d;
-		} else {
-			t = 0.0D;
+	public double sample(double x, double y, double z, double yAmplification, double minY) {
+		double offsetX = x + this.originX;
+		double offsetY = y + this.originY;
+		double offsetZ = z + this.originZ;
+		// this could be done with modf
+		int intX = floor(offsetX);
+		int intY = floor(offsetY);
+		int intZ = floor(offsetZ);
+		double fracX = offsetX - (double)intX;
+		double fracY = offsetY - (double)intY;
+		double fracZ = offsetZ - (double)intZ;
+		double clampY=0.0D;
+		if (yAmplification != 0.0D) {
+			double yFloor = Math.min(minY, fracY);
+			clampY = (double)floor(yFloor / yAmplification) * yAmplification;
 		}
-
-		return this.sample(i, j, k, l, m - t, n, o, p, q);
-	}
-
-	private static double grad(int hash, double x, double y, double z) {
-		return dot(GRADIENTS[hash & 15], x, y, z);
-	}
-
-	private int getGradient(int hash) {
-		return this.permutations[hash & 255] & 255;
+		return this.sample(intX, intY, intZ, fracX, fracY - clampY, fracZ, smoothStep(fracX), smoothStep(fracY), smoothStep(fracZ));
 	}
 
 	public double sample(int sectionX, int sectionY, int sectionZ, double localX, double localY, double localZ, double fadeLocalX, double fadeLocalY, double fadeLocalZ) {
-		int i = this.getGradient(sectionX) + sectionY;
-		int j = this.getGradient(i) + sectionZ;
-		int k = this.getGradient(i + 1) + sectionZ;
-		int l = this.getGradient(sectionX + 1) + sectionY;
-		int m = this.getGradient(l) + sectionZ;
-		int n = this.getGradient(l + 1) + sectionZ;
-		double d = grad(this.getGradient(j), localX, localY, localZ);
-		double e = grad(this.getGradient(m), localX - 1.0D, localY, localZ);
-		double f = grad(this.getGradient(k), localX, localY - 1.0D, localZ);
-		double g = grad(this.getGradient(n), localX - 1.0D, localY - 1.0D, localZ);
-		double h = grad(this.getGradient(j + 1), localX, localY, localZ - 1.0D);
-		double o = grad(this.getGradient(m + 1), localX - 1.0D, localY, localZ - 1.0D);
-		double p = grad(this.getGradient(k + 1), localX, localY - 1.0D, localZ - 1.0D);
-		double q = grad(this.getGradient(n + 1), localX - 1.0D, localY - 1.0D, localZ - 1.0D);
-		return lerp3(fadeLocalX, fadeLocalY, fadeLocalZ, d, e, f, g, h, o, p, q);
-	}
+		int pXY = this.lookup(sectionX) + sectionY;
+		int pX1Y = this.lookup(sectionX + 1) + sectionY;
 
-	public static int floor(double d) {
-		int i = (int)d;
-		return d < (double)i ? i - 1 : i;
-	}
+		int ppXYZ = this.lookup(pXY) + sectionZ;
+		int ppX1YZ = this.lookup(pX1Y) + sectionZ;
 
-	public static double lerp3(double deltaX, double deltaY, double deltaZ, double val000, double val100, double val010, double val110, double val001, double val101, double val011, double val111) {
-		return lerp(deltaZ, lerp2(deltaX, deltaY, val000, val100, val010, val110), lerp2(deltaX, deltaY, val001, val101, val011, val111));
-	}
+		int ppXY1Z = this.lookup(pXY + 1) + sectionZ;
+		int ppX1Y1Z = this.lookup(pX1Y + 1) + sectionZ;
 
-	public static double lerp2(double deltaX, double deltaY, double val00, double val10, double val01, double val11) {
-		return lerp(deltaY, lerp(deltaX, val00, val10), lerp(deltaX, val01, val11));
+		double x1 = grad(this.lookup(ppXYZ), localX, localY, localZ);
+		double x2 = grad(this.lookup(ppX1YZ), localX - 1.0D, localY, localZ);
+		double x3 = grad(this.lookup(ppXY1Z), localX, localY - 1.0D, localZ);
+		double x4 = grad(this.lookup(ppX1Y1Z), localX - 1.0D, localY - 1.0D, localZ);
+		double x5 = grad(this.lookup(ppXYZ + 1), localX, localY, localZ - 1.0D);
+		double x6 = grad(this.lookup(ppX1YZ + 1), localX - 1.0D, localY, localZ - 1.0D);
+		double x7 = grad(this.lookup(ppXY1Z + 1), localX, localY - 1.0D, localZ - 1.0D);
+		double x8 = grad(this.lookup(ppX1Y1Z + 1), localX - 1.0D, localY - 1.0D, localZ - 1.0D);
+		return lerp3(fadeLocalX, fadeLocalY, fadeLocalZ, x1, x2, x3, x4, x5, x6, x7, x8);
 	}
-
-	public static double lerp(double delta, double start, double end) {
-		return start + delta * (end - start);
-	}
-
-	public static double perlinFade(double d) {
-		return d * d * d * (d * (d * 6.0D - 15.0D) + 10.0D);
-	}
-
 }

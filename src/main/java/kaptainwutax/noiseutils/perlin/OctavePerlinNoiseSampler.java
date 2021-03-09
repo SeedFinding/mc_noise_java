@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static kaptainwutax.noiseutils.utils.MathHelper.maintainPrecision;
+
 public class OctavePerlinNoiseSampler implements NoiseSampler {
 	private final PerlinNoiseSampler[] octaveSamplers;
 	
@@ -64,11 +66,11 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 		}
 
 		if(end > 0) {
-			long n = (long)(perlin.sample(0.0D, 0.0D, 0.0D, 0.0D, 0.0D) * 9.223372036854776E18D);
-			rand.setSeed(n);
-			for(int o = end - 1; o >= 0; --o) {
-				if(o < length && octaves.contains(end - o)) {
-					this.octaveSamplers[o] = new PerlinNoiseSampler(rand);
+			long noiseSeed = (long)(perlin.sample(0.0D, 0.0D, 0.0D, 0.0D, 0.0D) * 9.223372036854776E18D);
+			rand.setSeed(noiseSeed);
+			for(int index = end - 1; index >= 0; --index) {
+				if(index < length && octaves.contains(end - index)) {
+					this.octaveSamplers[index] = new PerlinNoiseSampler(rand);
 				} else {
 					rand.advance(SKIP_262);
 				}
@@ -83,7 +85,7 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 		return this.sample(x, y, z, 0.0D, 0.0D, false);
 	}
 
-	public double sample(double x, double y, double z, double d, double e, boolean bl) {
+	public double sample(double x, double y, double z, double yAmplification, double minY, boolean useDefaultY) {
 		double noise = 0.0D;
 		// contribution of each octaves to the final noise, diminished by a factor of 2 (or increased by factor of 0.5)
 		double persistence = this.persistence;
@@ -92,8 +94,11 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 
 		for(PerlinNoiseSampler sampler: this.octaveSamplers) {
 			if(sampler != null){
-				noise += sampler.sample(maintainPrecision(x * persistence), bl ? -sampler.originY : maintainPrecision(y * persistence),
-						maintainPrecision(z * persistence), d * persistence, e * persistence) * lacunarity;
+				noise += sampler.sample(maintainPrecision(x * persistence),
+						useDefaultY ? -sampler.originY : maintainPrecision(y * persistence),
+						maintainPrecision(z * persistence),
+						yAmplification * persistence,
+						minY * persistence) * lacunarity;
 			}
 			persistence /= 2.0D;
 			lacunarity *= 2.0D;
@@ -106,12 +111,8 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 		return this.octaveSamplers[octave];
 	}
 
-	public static double maintainPrecision(double d) {
-		return d - (double) MathHelper.lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
-	}
-
 	@Override
-	public double sample(double x, double y, double d, double e) {
-		return this.sample(x, y, 0.0D, d, e, false);
+	public double sample(double x, double y, double yAmplification, double minY) {
+		return this.sample(x, y, 0.0D, yAmplification, minY, false);
 	}
 }
