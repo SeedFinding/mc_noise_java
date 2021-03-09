@@ -26,6 +26,6 @@ public class Noise {
     }
 
     protected int lookup(int hash) {
-        return this.permutations[hash & 0xff];
+        return this.permutations[hash & 0xFF] & 0xFF; // force byte to behave correctly and not wrapping up
     }
 }

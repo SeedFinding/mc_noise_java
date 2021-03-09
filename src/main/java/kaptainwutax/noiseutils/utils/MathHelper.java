@@ -12,7 +12,7 @@ public class MathHelper {
 	}
 
 	public static double grad(int hash, double x, double y, double z) {
-		return dot(GRADIENTS[hash & 15], x, y, z);
+		return dot(GRADIENTS[hash & 0xF], x, y, z);
 	}
 
 	public static double dot(int[] g, double x, double y, double z) {

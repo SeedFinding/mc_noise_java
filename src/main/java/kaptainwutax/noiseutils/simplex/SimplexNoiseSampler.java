@@ -10,8 +10,8 @@ public class SimplexNoiseSampler extends Noise {
 	private static final double SQRT_3 = Math.sqrt(3.0D);
 	private static final double SKEW_FACTOR_2D = 0.5D * (SQRT_3 - 1.0D); // also known as F2 // 0.3660254037844386D
 	private static final double UNSKEW_FACTOR_2D = (3.0D - SQRT_3) / 6.0D; // also known as G2 // 0.21132486540518713D
-	private static final double F3 = 0.16666666666666666D;
-	private static final double G3 = 0.3333333333333333D;
+	private static final double F3 = 0.3333333333333333D;
+	private static final double G3 = 0.16666666666666666D;
 
 	public SimplexNoiseSampler(JRand rand) {
 		super(rand);
@@ -65,12 +65,8 @@ public class SimplexNoiseSampler extends Noise {
 		x0 = x - x0;
 		y0 = y - y0;
 		z0 = z - z0;
-		byte i1;
-		byte j1;
-		byte k1;
-		byte i2;
-		byte j2;
-		byte k2;
+		byte i1,j1,k1;
+		byte i2,j2,k2;
 		if (x0 >= y0) {
 			if (y0 >= z0) { // X Y Z order
 				i1 = 1;
@@ -123,9 +119,9 @@ public class SimplexNoiseSampler extends Noise {
 		double x2 = x0 - (double)i2 + F3;
 		double y2 = y0 - (double)j2 + F3;
 		double z2 = z0 - (double)k2 + F3;
-		double bj = x0 - 1.0D + 0.5D;
-		double bk = y0 - 1.0D + 0.5D;
-		double bl = z0 - 1.0D + 0.5D;
+		double x3 = x0 - 1.0D + 0.5D;
+		double y3 = y0 - 1.0D + 0.5D;
+		double z3 = z0 - 1.0D + 0.5D;
 		int ii = i & 255;
 		int jj = j & 255;
 		int kk = k & 255;
@@ -136,12 +132,12 @@ public class SimplexNoiseSampler extends Noise {
 		double t0 = this.cornerNoise3d(gi0, x0, y0, z0, 0.6D);
 		double t1 = this.cornerNoise3d(gi1, x1, y1, z1, 0.6D);
 		double t2 = this.cornerNoise3d(gi2, x2, y2, z2, 0.6D);
-		double t3 = this.cornerNoise3d(gi3, bj, bk, bl, 0.6D);
+		double t3 = this.cornerNoise3d(gi3, x3, y3, z3, 0.6D);
 		return 32.0D * (t0 + t1 + t2 + t3);
 	}
 
-	private double cornerNoise3d(int hash, double x, double y, double z, double d) {
-		double contribution = d - x * x - y * y - z * z;
+	private double cornerNoise3d(int hash, double x, double y, double z, double max) {
+		double contribution = max - x * x - y * y - z * z;
 		double result;
 		if (contribution < 0.0D) {
 			result = 0.0D;
