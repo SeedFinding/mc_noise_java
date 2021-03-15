@@ -1,6 +1,7 @@
 package kaptainwutax;
 
 import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
+import kaptainwutax.noiseutils.simplex.OctaveSimplexNoiseSampler;
 import kaptainwutax.noiseutils.simplex.SimplexNoiseSampler;
 import kaptainwutax.seedutils.mc.ChunkRand;
 import org.junit.jupiter.api.DisplayName;
@@ -50,17 +51,15 @@ public class NoiseTest {
     @DisplayName("Test Simplex Octaves noise")
     public void testSimplexOctaves() {
         ChunkRand rand = new ChunkRand(1L);
-        OctavePerlinNoiseSampler octavePerlinNoiseSampler = new OctavePerlinNoiseSampler(rand,2);
+        OctaveSimplexNoiseSampler octaveSimplexNoiseSampler = new OctaveSimplexNoiseSampler(rand,2);
         double score = 0.0D;
         int bound = 100;
         for (int x = 0; x < bound; x++) {
             for (int y = 0; y < bound; y++) {
-                for (int z = 0; z < bound; z++) {
-                    score += octavePerlinNoiseSampler.sample(x, y, z);
-                }
+                    score += octaveSimplexNoiseSampler.sample(x, y);
             }
         }
-        assertEquals(111.29913539315102, score); // this is unvalidated behavior but non regressive at least
+        assertEquals(99.12262841409274, score); // this is unvalidated behavior but non regressive at least
     }
 
 }

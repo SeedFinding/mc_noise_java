@@ -15,8 +15,6 @@ import static kaptainwutax.noiseutils.utils.MathHelper.maintainPrecision;
 
 public class OctavePerlinNoiseSampler implements NoiseSampler {
 	private final PerlinNoiseSampler[] octaveSamplers;
-	
-	private static final LCG SKIP_262 = LCG.JAVA.combine(262);
 
 	public final double lacunarity;
 	public final double persistence;
