@@ -1,7 +1,7 @@
 package kaptainwutax.noiseutils.perlin;
 
 import kaptainwutax.noiseutils.noise.Noise;
-import kaptainwutax.seedutils.lcg.rand.JRand;
+import kaptainwutax.seedutils.rand.JRand;
 
 import static kaptainwutax.noiseutils.utils.MathHelper.*;
 
@@ -19,13 +19,13 @@ public class PerlinNoiseSampler extends Noise {
 		int intX = floor(offsetX);
 		int intY = floor(offsetY);
 		int intZ = floor(offsetZ);
-		double fracX = offsetX - (double)intX;
-		double fracY = offsetY - (double)intY;
-		double fracZ = offsetZ - (double)intZ;
-		double clampY=0.0D;
+		double fracX = offsetX - (double) intX;
+		double fracY = offsetY - (double) intY;
+		double fracZ = offsetZ - (double) intZ;
+		double clampY = 0.0D;
 		if (yAmplification != 0.0D) {
 			double yFloor = Math.min(minY, fracY);
-			clampY = (double)floor(yFloor / yAmplification) * yAmplification;
+			clampY = (double) floor(yFloor / yAmplification) * yAmplification;
 		}
 		return this.sample(intX, intY, intZ, fracX, fracY - clampY, fracZ, smoothStep(fracX), smoothStep(fracY), smoothStep(fracZ));
 	}

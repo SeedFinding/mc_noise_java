@@ -1,7 +1,7 @@
 package kaptainwutax.noiseutils.noise;
 
+import kaptainwutax.mcutils.rand.ChunkRand;
 import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
-import kaptainwutax.seedutils.mc.ChunkRand;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ public class DoublePerlinNoiseSampler {
 	}
 
 	private static double createAmplitude(int octaves) {
-		return 0.1D * (1.0D + 1.0D / (double)(octaves + 1));
+		return 0.1D * (1.0D + 1.0D / (double) (octaves + 1));
 	}
 
 	public double sample(double x, double y, double z) {

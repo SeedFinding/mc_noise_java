@@ -1,9 +1,10 @@
 package kaptainwutax.noiseutils.simplex;
 
 import kaptainwutax.noiseutils.noise.Noise;
-import kaptainwutax.seedutils.lcg.rand.JRand;
+import kaptainwutax.seedutils.rand.JRand;
 
-import static kaptainwutax.noiseutils.utils.MathHelper.*;
+import static kaptainwutax.noiseutils.utils.MathHelper.floor;
+import static kaptainwutax.noiseutils.utils.MathHelper.grad;
 
 public class SimplexNoiseSampler extends Noise {
 
@@ -22,9 +23,9 @@ public class SimplexNoiseSampler extends Noise {
 		// in minecraft those are the temperatures
 		int hairyX = floor(x + hairyFactor);
 		int hairyZ = floor(y + hairyFactor);
-		double mixedHairyXz = (double)(hairyX + hairyZ) * UNSKEW_FACTOR_2D;
-		double diffXToXz = (double)hairyX - mixedHairyXz;
-		double diffZToXz = (double)hairyZ - mixedHairyXz;
+		double mixedHairyXz = (double) (hairyX + hairyZ) * UNSKEW_FACTOR_2D;
+		double diffXToXz = (double) hairyX - mixedHairyXz;
+		double diffZToXz = (double) hairyZ - mixedHairyXz;
 		double x0 = x - diffXToXz;
 		double y0 = y - diffZToXz;
 		byte offsetSecondCornerX;
@@ -37,8 +38,8 @@ public class SimplexNoiseSampler extends Noise {
 			offsetSecondCornerZ = 1;
 		}
 
-		double x1 = x0 - (double)offsetSecondCornerX + UNSKEW_FACTOR_2D;
-		double y1 = y0 - (double)offsetSecondCornerZ + UNSKEW_FACTOR_2D;
+		double x1 = x0 - (double) offsetSecondCornerX + UNSKEW_FACTOR_2D;
+		double y1 = y0 - (double) offsetSecondCornerZ + UNSKEW_FACTOR_2D;
 		double x3 = x0 - 1.0D + 2.0D * UNSKEW_FACTOR_2D;
 		double y3 = y0 - 1.0D + 2.0D * UNSKEW_FACTOR_2D;
 		int ii = hairyX & 255;
@@ -58,15 +59,15 @@ public class SimplexNoiseSampler extends Noise {
 		int i = floor(x + skewFactor);
 		int j = floor(y + skewFactor);
 		int k = floor(z + skewFactor);
-		double unskewFactor = (double)(i + j + k) * G3; // G3 is 1/6
-		double x0 = (double)i - unskewFactor;
-		double y0 = (double)j - unskewFactor;
-		double z0 = (double)k - unskewFactor;
+		double unskewFactor = (double) (i + j + k) * G3; // G3 is 1/6
+		double x0 = (double) i - unskewFactor;
+		double y0 = (double) j - unskewFactor;
+		double z0 = (double) k - unskewFactor;
 		x0 = x - x0;
 		y0 = y - y0;
 		z0 = z - z0;
-		byte i1,j1,k1;
-		byte i2,j2,k2;
+		byte i1, j1, k1;
+		byte i2, j2, k2;
 		if (x0 >= y0) {
 			if (y0 >= z0) { // X Y Z order
 				i1 = 1;
@@ -113,12 +114,12 @@ public class SimplexNoiseSampler extends Noise {
 			k2 = 0;
 		}
 
-		double x1 = x0 - (double)i1 + G3;
-		double y1 = y0 - (double)j1 + G3;
-		double z1 = z0 - (double)k1 + G3;
-		double x2 = x0 - (double)i2 + F3;
-		double y2 = y0 - (double)j2 + F3;
-		double z2 = z0 - (double)k2 + F3;
+		double x1 = x0 - (double) i1 + G3;
+		double y1 = y0 - (double) j1 + G3;
+		double z1 = z0 - (double) k1 + G3;
+		double x2 = x0 - (double) i2 + F3;
+		double y2 = y0 - (double) j2 + F3;
+		double z2 = z0 - (double) k2 + F3;
 		double x3 = x0 - 1.0D + 0.5D;
 		double y3 = y0 - 1.0D + 0.5D;
 		double z3 = z0 - 1.0D + 0.5D;
@@ -143,7 +144,7 @@ public class SimplexNoiseSampler extends Noise {
 			result = 0.0D;
 		} else {
 			contribution *= contribution;
-			result = contribution * contribution * grad(hash,x,y,z);
+			result = contribution * contribution * grad(hash, x, y, z);
 		}
 
 		return result;
