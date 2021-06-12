@@ -1,8 +1,10 @@
 package kaptainwutax.noiseutils.noise;
 
 import kaptainwutax.mcutils.rand.ChunkRand;
+import kaptainwutax.mcutils.util.data.Pair;
 import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -14,6 +16,21 @@ public class DoublePerlinNoiseSampler {
 
 	public DoublePerlinNoiseSampler(ChunkRand rand, IntStream octaves) {
 		this(rand, octaves.boxed().collect(Collectors.toList()));
+	}
+
+	public DoublePerlinNoiseSampler(ChunkRand rand, Pair<Integer,List<Double>> octavesParams) {
+		this.firstSampler = new OctavePerlinNoiseSampler(rand, octavesParams);
+		this.secondSampler = new OctavePerlinNoiseSampler(rand, octavesParams);
+		int minNbOctaves = Integer.MAX_VALUE;
+		int maxNbOctaves = Integer.MIN_VALUE;
+		for (int idx = 0; idx < octavesParams.getSecond().size(); idx++) {
+			double d0 = octavesParams.getSecond().get(idx);
+			if (d0 != 0.0D) {
+				minNbOctaves = Math.min(minNbOctaves, idx);
+				maxNbOctaves = Math.max(maxNbOctaves, idx);
+			}
+		}
+		this.amplitude = 0.16666666666666666D / createAmplitude(maxNbOctaves - minNbOctaves);
 	}
 
 	public DoublePerlinNoiseSampler(ChunkRand rand, List<Integer> octaves) {
