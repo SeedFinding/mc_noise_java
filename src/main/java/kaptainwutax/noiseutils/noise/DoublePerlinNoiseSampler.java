@@ -4,7 +4,6 @@ import kaptainwutax.mcutils.rand.ChunkRand;
 import kaptainwutax.mcutils.util.data.Pair;
 import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -18,7 +17,7 @@ public class DoublePerlinNoiseSampler {
 		this(rand, octaves.boxed().collect(Collectors.toList()));
 	}
 
-	public DoublePerlinNoiseSampler(ChunkRand rand, Pair<Integer,List<Double>> octavesParams) {
+	public DoublePerlinNoiseSampler(ChunkRand rand, Pair<Integer, List<Double>> octavesParams) {
 		this.firstSampler = new OctavePerlinNoiseSampler(rand, octavesParams);
 		this.secondSampler = new OctavePerlinNoiseSampler(rand, octavesParams);
 		int minNbOctaves = Integer.MAX_VALUE;

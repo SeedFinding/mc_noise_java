@@ -1,7 +1,5 @@
 package kaptainwutax.noiseutils.perlin;
 
-import kaptainwutax.mcutils.util.data.Pair;
-import kaptainwutax.mcutils.util.data.Quad;
 import kaptainwutax.mcutils.util.data.Triplet;
 import kaptainwutax.noiseutils.noise.Noise;
 import kaptainwutax.seedutils.rand.JRand;
@@ -14,16 +12,16 @@ public class PerlinNoiseSampler extends Noise {
 		super(rand);
 	}
 
-	public double sample(double x, double y, double z, double yAmplification, double minY) {=
-		Triplet<int[],double[],double[]> args=getArgs(x,y,z,yAmplification,minY);
-		int[] section=args.getFirst();
-		double[] local=args.getSecond();
-		double[] fading=args.getThird();
-		double[] perms=samplePermutations(section,local);
+	public double sample(double x, double y, double z, double yAmplification, double minY) {
+		Triplet<int[], double[], double[]> args = getArgs(x, y, z, yAmplification, minY);
+		int[] section = args.getFirst();
+		double[] local = args.getSecond();
+		double[] fading = args.getThird();
+		double[] perms = samplePermutations(section, local);
 		return lerp3(fading[0], fading[1], fading[2], perms[0], perms[1], perms[2], perms[3], perms[4], perms[5], perms[6], perms[7]);
 	}
 
-	public Triplet<int[],double[],double[]> getArgs(double x, double y, double z, double yAmplification, double minY) {
+	public Triplet<int[], double[], double[]> getArgs(double x, double y, double z, double yAmplification, double minY) {
 		double offsetX = x + this.originX;
 		double offsetY = y + this.originY;
 		double offsetZ = z + this.originZ;
@@ -44,9 +42,9 @@ public class PerlinNoiseSampler extends Noise {
 			double yFloor = Math.min(minY, localY);
 			localY -= (double) floor(yFloor / yAmplification) * yAmplification;
 		}
-		return new Triplet<>(new int[]{sectionX,sectionX,sectionZ},new double[]{localX,localY,localZ},new double[]{fadeLocalX, fadeLocalY, fadeLocalZ});
+		return new Triplet<>(new int[] {sectionX, sectionY, sectionZ}, new double[] {localX, localY, localZ}, new double[] {fadeLocalX, fadeLocalY, fadeLocalZ});
 	}
-	
+
 
 	public double[] samplePermutations(int[] section, double[] local) {
 		int pXY = this.lookup(section[0]) + section[1];
@@ -67,7 +65,7 @@ public class PerlinNoiseSampler extends Noise {
 		double x7 = grad(this.lookup(ppXY1Z + 1), local[0], local[1] - 1.0D, local[2] - 1.0D);
 		double x8 = grad(this.lookup(ppX1Y1Z + 1), local[0] - 1.0D, local[1] - 1.0D, local[2] - 1.0D);
 
-		return new double[] { x1, x2, x3, x4, x5, x6, x7, x8};
+		return new double[] {x1, x2, x3, x4, x5, x6, x7, x8};
 	}
 
 }
