@@ -12,30 +12,35 @@ public class PerlinNoiseSampler extends Noise {
 	}
 
 	public double sample(double x, double y, double z, double yAmplification, double minY) {
+		double[] perms = sampleEx(x, y, z, yAmplification, minY);
+		return lerp3(perms[0], perms[1], perms[2], perms[3], perms[4], perms[5], perms[6], perms[7], perms[8], perms[9], perms[10]);
+	}
+
+	public double[] sampleEx(double x, double y, double z, double yAmplification, double minY) {
 		double offsetX = x + this.originX;
 		double offsetY = y + this.originY;
 		double offsetZ = z + this.originZ;
 		// this could be done with modf
-		int intX = floor(offsetX);
-		int intY = floor(offsetY);
-		int intZ = floor(offsetZ);
-		double fracX = offsetX - (double) intX;
-		double fracY = offsetY - (double) intY;
-		double fracZ = offsetZ - (double) intZ;
-		double clampY = 0.0D;
+		int sectionX = floor(offsetX);
+		int sectionY = floor(offsetY);
+		int sectionZ = floor(offsetZ);
+		double localX = offsetX - (double) sectionX;
+		double localY = offsetY - (double) sectionY;
+		double localZ = offsetZ - (double) sectionZ;
+
+		double fadeLocalX = smoothStep(localX);
+		double fadeLocalY = smoothStep(localY);
+		double fadeLocalZ = smoothStep(localZ);
+
+		// this is useful for 1.16+
 		if (yAmplification != 0.0D) {
-			double yFloor = Math.min(minY, fracY);
-			clampY = (double) floor(yFloor / yAmplification) * yAmplification;
+			double yFloor = Math.min(minY, localY);
+			localY -= (double) floor(yFloor / yAmplification) * yAmplification;
 		}
-		return this.sample(intX, intY, intZ, fracX, fracY - clampY, fracZ, smoothStep(fracX), smoothStep(fracY), smoothStep(fracZ));
+		return this.samplePermutations(sectionX, sectionY, sectionZ, localX, localY, localZ, fadeLocalX, fadeLocalY, fadeLocalZ);
 	}
 
-	public double sample(int sectionX, int sectionY, int sectionZ, double localX, double localY, double localZ, double fadeLocalX, double fadeLocalY, double fadeLocalZ) {
-		double[] x=getPermutations(sectionX,sectionY,sectionZ,localX,localY,localZ,fadeLocalX,fadeLocalY,fadeLocalZ);
-		return lerp3(fadeLocalX, fadeLocalY, fadeLocalZ, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
-	}
-
-	public double[] getPermutations(int sectionX, int sectionY, int sectionZ, double localX, double localY, double localZ, double fadeLocalX, double fadeLocalY, double fadeLocalZ) {
+	public double[] samplePermutations(int sectionX, int sectionY, int sectionZ, double localX, double localY, double localZ, double fadeLocalX, double fadeLocalY, double fadeLocalZ) {
 		int pXY = this.lookup(sectionX) + sectionY;
 		int pX1Y = this.lookup(sectionX + 1) + sectionY;
 
@@ -53,6 +58,8 @@ public class PerlinNoiseSampler extends Noise {
 		double x6 = grad(this.lookup(ppX1YZ + 1), localX - 1.0D, localY, localZ - 1.0D);
 		double x7 = grad(this.lookup(ppXY1Z + 1), localX, localY - 1.0D, localZ - 1.0D);
 		double x8 = grad(this.lookup(ppX1Y1Z + 1), localX - 1.0D, localY - 1.0D, localZ - 1.0D);
-		return new double[]{x1,x2,x3,x4,x5,x6,x7,x8};
+
+		return new double[] {fadeLocalX, fadeLocalY, fadeLocalZ, x1, x2, x3, x4, x5, x6, x7, x8};
 	}
+
 }
