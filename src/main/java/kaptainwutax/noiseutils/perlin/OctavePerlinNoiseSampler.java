@@ -30,6 +30,10 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 		this.persistence = 1.0;
 	}
 
+	public int getCount(){
+		return this.octaveSamplers.length;
+	}
+
 	public OctavePerlinNoiseSampler(ChunkRand rand, IntStream octaves) {
 		this(rand, octaves.boxed().collect(Collectors.toList()));
 	}

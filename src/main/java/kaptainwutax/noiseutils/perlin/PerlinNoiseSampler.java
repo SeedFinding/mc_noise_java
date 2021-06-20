@@ -31,6 +31,11 @@ public class PerlinNoiseSampler extends Noise {
 	}
 
 	public double sample(int sectionX, int sectionY, int sectionZ, double localX, double localY, double localZ, double fadeLocalX, double fadeLocalY, double fadeLocalZ) {
+		double[] x=getPermutations(sectionX,sectionY,sectionZ,localX,localY,localZ,fadeLocalX,fadeLocalY,fadeLocalZ);
+		return lerp3(fadeLocalX, fadeLocalY, fadeLocalZ, x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+	}
+
+	public double[] getPermutations(int sectionX, int sectionY, int sectionZ, double localX, double localY, double localZ, double fadeLocalX, double fadeLocalY, double fadeLocalZ) {
 		int pXY = this.lookup(sectionX) + sectionY;
 		int pX1Y = this.lookup(sectionX + 1) + sectionY;
 
@@ -48,6 +53,6 @@ public class PerlinNoiseSampler extends Noise {
 		double x6 = grad(this.lookup(ppX1YZ + 1), localX - 1.0D, localY, localZ - 1.0D);
 		double x7 = grad(this.lookup(ppXY1Z + 1), localX, localY - 1.0D, localZ - 1.0D);
 		double x8 = grad(this.lookup(ppX1Y1Z + 1), localX - 1.0D, localY - 1.0D, localZ - 1.0D);
-		return lerp3(fadeLocalX, fadeLocalY, fadeLocalZ, x1, x2, x3, x4, x5, x6, x7, x8);
+		return new double[]{x1,x2,x3,x4,x5,x6,x7,x8};
 	}
 }
