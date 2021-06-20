@@ -1,5 +1,8 @@
 package kaptainwutax.noiseutils.perlin;
 
+import kaptainwutax.mcutils.util.data.Pair;
+import kaptainwutax.mcutils.util.data.Quad;
+import kaptainwutax.mcutils.util.data.Triplet;
 import kaptainwutax.noiseutils.noise.Noise;
 import kaptainwutax.seedutils.rand.JRand;
 
@@ -11,12 +14,16 @@ public class PerlinNoiseSampler extends Noise {
 		super(rand);
 	}
 
-	public double sample(double x, double y, double z, double yAmplification, double minY) {
-		double[] perms = sampleEx(x, y, z, yAmplification, minY);
-		return lerp3(perms[0], perms[1], perms[2], perms[3], perms[4], perms[5], perms[6], perms[7], perms[8], perms[9], perms[10]);
+	public double sample(double x, double y, double z, double yAmplification, double minY) {=
+		Triplet<int[],double[],double[]> args=getArgs(x,y,z,yAmplification,minY);
+		int[] section=args.getFirst();
+		double[] local=args.getSecond();
+		double[] fading=args.getThird();
+		double[] perms=samplePermutations(section,local);
+		return lerp3(fading[0], fading[1], fading[2], perms[0], perms[1], perms[2], perms[3], perms[4], perms[5], perms[6], perms[7]);
 	}
 
-	public double[] sampleEx(double x, double y, double z, double yAmplification, double minY) {
+	public Triplet<int[],double[],double[]> getArgs(double x, double y, double z, double yAmplification, double minY) {
 		double offsetX = x + this.originX;
 		double offsetY = y + this.originY;
 		double offsetZ = z + this.originZ;
@@ -37,29 +44,30 @@ public class PerlinNoiseSampler extends Noise {
 			double yFloor = Math.min(minY, localY);
 			localY -= (double) floor(yFloor / yAmplification) * yAmplification;
 		}
-		return this.samplePermutations(sectionX, sectionY, sectionZ, localX, localY, localZ, fadeLocalX, fadeLocalY, fadeLocalZ);
+		return new Triplet<>(new int[]{sectionX,sectionX,sectionZ},new double[]{localX,localY,localZ},new double[]{fadeLocalX, fadeLocalY, fadeLocalZ});
 	}
+	
 
-	public double[] samplePermutations(int sectionX, int sectionY, int sectionZ, double localX, double localY, double localZ, double fadeLocalX, double fadeLocalY, double fadeLocalZ) {
-		int pXY = this.lookup(sectionX) + sectionY;
-		int pX1Y = this.lookup(sectionX + 1) + sectionY;
+	public double[] samplePermutations(int[] section, double[] local) {
+		int pXY = this.lookup(section[0]) + section[1];
+		int pX1Y = this.lookup(section[0] + 1) + section[1];
 
-		int ppXYZ = this.lookup(pXY) + sectionZ;
-		int ppX1YZ = this.lookup(pX1Y) + sectionZ;
+		int ppXYZ = this.lookup(pXY) + section[2];
+		int ppX1YZ = this.lookup(pX1Y) + section[2];
 
-		int ppXY1Z = this.lookup(pXY + 1) + sectionZ;
-		int ppX1Y1Z = this.lookup(pX1Y + 1) + sectionZ;
+		int ppXY1Z = this.lookup(pXY + 1) + section[2];
+		int ppX1Y1Z = this.lookup(pX1Y + 1) + section[2];
 
-		double x1 = grad(this.lookup(ppXYZ), localX, localY, localZ);
-		double x2 = grad(this.lookup(ppX1YZ), localX - 1.0D, localY, localZ);
-		double x3 = grad(this.lookup(ppXY1Z), localX, localY - 1.0D, localZ);
-		double x4 = grad(this.lookup(ppX1Y1Z), localX - 1.0D, localY - 1.0D, localZ);
-		double x5 = grad(this.lookup(ppXYZ + 1), localX, localY, localZ - 1.0D);
-		double x6 = grad(this.lookup(ppX1YZ + 1), localX - 1.0D, localY, localZ - 1.0D);
-		double x7 = grad(this.lookup(ppXY1Z + 1), localX, localY - 1.0D, localZ - 1.0D);
-		double x8 = grad(this.lookup(ppX1Y1Z + 1), localX - 1.0D, localY - 1.0D, localZ - 1.0D);
+		double x1 = grad(this.lookup(ppXYZ), local[0], local[1], local[2]);
+		double x2 = grad(this.lookup(ppX1YZ), local[0] - 1.0D, local[1], local[2]);
+		double x3 = grad(this.lookup(ppXY1Z), local[0], local[1] - 1.0D, local[2]);
+		double x4 = grad(this.lookup(ppX1Y1Z), local[0] - 1.0D, local[1] - 1.0D, local[2]);
+		double x5 = grad(this.lookup(ppXYZ + 1), local[0], local[1], local[2] - 1.0D);
+		double x6 = grad(this.lookup(ppX1YZ + 1), local[0] - 1.0D, local[1], local[2] - 1.0D);
+		double x7 = grad(this.lookup(ppXY1Z + 1), local[0], local[1] - 1.0D, local[2] - 1.0D);
+		double x8 = grad(this.lookup(ppX1Y1Z + 1), local[0] - 1.0D, local[1] - 1.0D, local[2] - 1.0D);
 
-		return new double[] {fadeLocalX, fadeLocalY, fadeLocalZ, x1, x2, x3, x4, x5, x6, x7, x8};
+		return new double[] { x1, x2, x3, x4, x5, x6, x7, x8};
 	}
 
 }
