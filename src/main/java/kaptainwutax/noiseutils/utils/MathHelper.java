@@ -2,8 +2,8 @@ package kaptainwutax.noiseutils.utils;
 
 public class MathHelper {
 	public static final int[][] GRADIENTS = new int[][] {
-			{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
-			{0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}, {1, 1, 0}, {0, -1, 1}, {-1, 1, 0}, {0, -1, -1}
+		{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
+		{0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}, {1, 1, 0}, {0, -1, 1}, {-1, 1, 0}, {0, -1, -1}
 	};
 
 	// public static double grad(int hash, double x, double y, double z) {
@@ -11,7 +11,7 @@ public class MathHelper {
 	//	}
 
 	public static double grad(int hash, double x, double y, double z) {
-		switch (hash & 0xF) {
+		switch(hash & 0xF) {
 			case 0x0:
 				return x + y;
 			case 0x1:
@@ -48,13 +48,13 @@ public class MathHelper {
 	}
 
 	public static long lfloor(double d) {
-		long l = (long) d;
-		return d < (double) l ? l - 1L : l;
+		long l = (long)d;
+		return d < (double)l ? l - 1L : l;
 	}
 
 
 	public static double dot(int[] g, double x, double y, double z) {
-		return (double) g[0] * x + (double) g[1] * y + (double) g[2] * z;
+		return (double)g[0] * x + (double)g[1] * y + (double)g[2] * z;
 	}
 
 	public static double lerp3(double deltaX, double deltaY, double deltaZ, double val000, double val100, double val010, double val110, double val001, double val101, double val011, double val111) {
@@ -76,11 +76,11 @@ public class MathHelper {
 	}
 
 	public static int floor(double d) {
-		int i = (int) d;
-		return d < (double) i ? i - 1 : i;
+		int i = (int)d;
+		return d < (double)i ? i - 1 : i;
 	}
 
 	public static double maintainPrecision(double d) {
-		return d - (double) MathHelper.lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
+		return d - (double)MathHelper.lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
 	}
 }

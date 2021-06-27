@@ -23,14 +23,14 @@ public class SimplexNoiseSampler extends Noise {
 		// in minecraft those are the temperatures
 		int hairyX = floor(x + hairyFactor);
 		int hairyZ = floor(y + hairyFactor);
-		double mixedHairyXz = (double) (hairyX + hairyZ) * UNSKEW_FACTOR_2D;
-		double diffXToXz = (double) hairyX - mixedHairyXz;
-		double diffZToXz = (double) hairyZ - mixedHairyXz;
+		double mixedHairyXz = (double)(hairyX + hairyZ) * UNSKEW_FACTOR_2D;
+		double diffXToXz = (double)hairyX - mixedHairyXz;
+		double diffZToXz = (double)hairyZ - mixedHairyXz;
 		double x0 = x - diffXToXz;
 		double y0 = y - diffZToXz;
 		byte offsetSecondCornerX;
 		byte offsetSecondCornerZ;
-		if (x0 > y0) { // lower triangle, XY order: (0,0)->(1,0)->(1,1)
+		if(x0 > y0) { // lower triangle, XY order: (0,0)->(1,0)->(1,1)
 			offsetSecondCornerX = 1;
 			offsetSecondCornerZ = 0;
 		} else { // upper triangle, YX order: (0,0)->(0,1)->(1,1)
@@ -38,8 +38,8 @@ public class SimplexNoiseSampler extends Noise {
 			offsetSecondCornerZ = 1;
 		}
 
-		double x1 = x0 - (double) offsetSecondCornerX + UNSKEW_FACTOR_2D;
-		double y1 = y0 - (double) offsetSecondCornerZ + UNSKEW_FACTOR_2D;
+		double x1 = x0 - (double)offsetSecondCornerX + UNSKEW_FACTOR_2D;
+		double y1 = y0 - (double)offsetSecondCornerZ + UNSKEW_FACTOR_2D;
 		double x3 = x0 - 1.0D + 2.0D * UNSKEW_FACTOR_2D;
 		double y3 = y0 - 1.0D + 2.0D * UNSKEW_FACTOR_2D;
 		int ii = hairyX & 255;
@@ -59,24 +59,24 @@ public class SimplexNoiseSampler extends Noise {
 		int i = floor(x + skewFactor);
 		int j = floor(y + skewFactor);
 		int k = floor(z + skewFactor);
-		double unskewFactor = (double) (i + j + k) * G3; // G3 is 1/6
-		double x0 = (double) i - unskewFactor;
-		double y0 = (double) j - unskewFactor;
-		double z0 = (double) k - unskewFactor;
+		double unskewFactor = (double)(i + j + k) * G3; // G3 is 1/6
+		double x0 = (double)i - unskewFactor;
+		double y0 = (double)j - unskewFactor;
+		double z0 = (double)k - unskewFactor;
 		x0 = x - x0;
 		y0 = y - y0;
 		z0 = z - z0;
 		byte i1, j1, k1;
 		byte i2, j2, k2;
-		if (x0 >= y0) {
-			if (y0 >= z0) { // X Y Z order
+		if(x0 >= y0) {
+			if(y0 >= z0) { // X Y Z order
 				i1 = 1;
 				j1 = 0;
 				k1 = 0;
 				i2 = 1;
 				j2 = 1;
 				k2 = 0;
-			} else if (x0 >= z0) { // X Z Y order
+			} else if(x0 >= z0) { // X Z Y order
 				i1 = 1;
 				j1 = 0;
 				k1 = 0;
@@ -91,14 +91,14 @@ public class SimplexNoiseSampler extends Noise {
 				j2 = 0;
 				k2 = 1;
 			}
-		} else if (y0 < z0) { // Z Y X order
+		} else if(y0 < z0) { // Z Y X order
 			i1 = 0;
 			j1 = 0;
 			k1 = 1;
 			i2 = 0;
 			j2 = 1;
 			k2 = 1;
-		} else if (x0 < z0) { // Y Z X order
+		} else if(x0 < z0) { // Y Z X order
 			i1 = 0;
 			j1 = 1;
 			k1 = 0;
@@ -114,12 +114,12 @@ public class SimplexNoiseSampler extends Noise {
 			k2 = 0;
 		}
 
-		double x1 = x0 - (double) i1 + G3;
-		double y1 = y0 - (double) j1 + G3;
-		double z1 = z0 - (double) k1 + G3;
-		double x2 = x0 - (double) i2 + F3;
-		double y2 = y0 - (double) j2 + F3;
-		double z2 = z0 - (double) k2 + F3;
+		double x1 = x0 - (double)i1 + G3;
+		double y1 = y0 - (double)j1 + G3;
+		double z1 = z0 - (double)k1 + G3;
+		double x2 = x0 - (double)i2 + F3;
+		double y2 = y0 - (double)j2 + F3;
+		double z2 = z0 - (double)k2 + F3;
 		double x3 = x0 - 1.0D + 0.5D;
 		double y3 = y0 - 1.0D + 0.5D;
 		double z3 = z0 - 1.0D + 0.5D;
@@ -140,7 +140,7 @@ public class SimplexNoiseSampler extends Noise {
 	private double cornerNoise3d(int hash, double x, double y, double z, double max) {
 		double contribution = max - x * x - y * y - z * z;
 		double result;
-		if (contribution < 0.0D) {
+		if(contribution < 0.0D) {
 			result = 0.0D;
 		} else {
 			contribution *= contribution;

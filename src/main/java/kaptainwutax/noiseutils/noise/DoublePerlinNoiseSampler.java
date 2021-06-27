@@ -1,8 +1,9 @@
 package kaptainwutax.noiseutils.noise;
 
-import kaptainwutax.mcutils.rand.ChunkRand;
+
 import kaptainwutax.mcutils.util.data.Pair;
 import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
+import kaptainwutax.seedutils.rand.JRand;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,18 +14,18 @@ public class DoublePerlinNoiseSampler {
 	private final OctavePerlinNoiseSampler firstSampler;
 	private final OctavePerlinNoiseSampler secondSampler;
 
-	public DoublePerlinNoiseSampler(ChunkRand rand, IntStream octaves) {
+	public DoublePerlinNoiseSampler(JRand rand, IntStream octaves) {
 		this(rand, octaves.boxed().collect(Collectors.toList()));
 	}
 
-	public DoublePerlinNoiseSampler(ChunkRand rand, Pair<Integer, List<Double>> octavesParams) {
+	public DoublePerlinNoiseSampler(JRand rand, Pair<Integer, List<Double>> octavesParams) {
 		this.firstSampler = new OctavePerlinNoiseSampler(rand, octavesParams);
 		this.secondSampler = new OctavePerlinNoiseSampler(rand, octavesParams);
 		int minNbOctaves = Integer.MAX_VALUE;
 		int maxNbOctaves = Integer.MIN_VALUE;
-		for (int idx = 0; idx < octavesParams.getSecond().size(); idx++) {
+		for(int idx = 0; idx < octavesParams.getSecond().size(); idx++) {
 			double d0 = octavesParams.getSecond().get(idx);
-			if (d0 != 0.0D) {
+			if(d0 != 0.0D) {
 				minNbOctaves = Math.min(minNbOctaves, idx);
 				maxNbOctaves = Math.max(maxNbOctaves, idx);
 			}
@@ -32,7 +33,7 @@ public class DoublePerlinNoiseSampler {
 		this.amplitude = 0.16666666666666666D / createAmplitude(maxNbOctaves - minNbOctaves);
 	}
 
-	public DoublePerlinNoiseSampler(ChunkRand rand, List<Integer> octaves) {
+	public DoublePerlinNoiseSampler(JRand rand, List<Integer> octaves) {
 		this.firstSampler = new OctavePerlinNoiseSampler(rand, octaves);
 		this.secondSampler = new OctavePerlinNoiseSampler(rand, octaves);
 		int minNbOctave = octaves.stream().min(Integer::compareTo).orElse(0);
@@ -41,7 +42,7 @@ public class DoublePerlinNoiseSampler {
 	}
 
 	private static double createAmplitude(int octaves) {
-		return 0.1D * (1.0D + 1.0D / (double) (octaves + 1));
+		return 0.1D * (1.0D + 1.0D / (double)(octaves + 1));
 	}
 
 	public double sample(double x, double y, double z) {

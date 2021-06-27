@@ -14,11 +14,11 @@ public class Noise {
 		this.originY = rand.nextDouble() * 256.0D;
 		this.originZ = rand.nextDouble() * 256.0D;
 
-		for (int j = 0; j < 256; ++j) {
-			this.permutations[j] = (byte) j;
+		for(int j = 0; j < 256; ++j) {
+			this.permutations[j] = (byte)j;
 		}
 
-		for (int index = 0; index < 256; ++index) {
+		for(int index = 0; index < 256; ++index) {
 			int randomIndex = rand.nextInt(256 - index) + index;
 			byte temp = this.permutations[index];
 			this.permutations[index] = this.permutations[randomIndex];

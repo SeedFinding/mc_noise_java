@@ -4,7 +4,10 @@ import kaptainwutax.mcutils.util.data.Triplet;
 import kaptainwutax.noiseutils.noise.Noise;
 import kaptainwutax.seedutils.rand.JRand;
 
-import static kaptainwutax.noiseutils.utils.MathHelper.*;
+import static kaptainwutax.noiseutils.utils.MathHelper.floor;
+import static kaptainwutax.noiseutils.utils.MathHelper.grad;
+import static kaptainwutax.noiseutils.utils.MathHelper.lerp3;
+import static kaptainwutax.noiseutils.utils.MathHelper.smoothStep;
 
 public class PerlinNoiseSampler extends Noise {
 
@@ -29,18 +32,18 @@ public class PerlinNoiseSampler extends Noise {
 		int sectionX = floor(offsetX);
 		int sectionY = floor(offsetY);
 		int sectionZ = floor(offsetZ);
-		double localX = offsetX - (double) sectionX;
-		double localY = offsetY - (double) sectionY;
-		double localZ = offsetZ - (double) sectionZ;
+		double localX = offsetX - (double)sectionX;
+		double localY = offsetY - (double)sectionY;
+		double localZ = offsetZ - (double)sectionZ;
 
 		double fadeLocalX = smoothStep(localX);
 		double fadeLocalY = smoothStep(localY);
 		double fadeLocalZ = smoothStep(localZ);
 
 		// this is useful for 1.16+
-		if (yAmplification != 0.0D) {
+		if(yAmplification != 0.0D) {
 			double yFloor = Math.min(minY, localY);
-			localY -= (double) floor(yFloor / yAmplification) * yAmplification;
+			localY -= (double)floor(yFloor / yAmplification) * yAmplification;
 		}
 		return new Triplet<>(new int[] {sectionX, sectionY, sectionZ}, new double[] {localX, localY, localZ}, new double[] {fadeLocalX, fadeLocalY, fadeLocalZ});
 	}

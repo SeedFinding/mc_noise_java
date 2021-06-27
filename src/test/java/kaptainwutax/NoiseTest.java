@@ -1,9 +1,10 @@
 package kaptainwutax;
 
-import kaptainwutax.mcutils.rand.ChunkRand;
+
 import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
 import kaptainwutax.noiseutils.simplex.OctaveSimplexNoiseSampler;
 import kaptainwutax.noiseutils.simplex.SimplexNoiseSampler;
+import kaptainwutax.seedutils.rand.JRand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class NoiseTest {
 	@Test
 	@DisplayName("Test Perlin noise")
 	public void testPerlin() {
-		ChunkRand rand = new ChunkRand(1L);
+		JRand rand = new JRand(1L);
 		OctavePerlinNoiseSampler perlinNoiseSampler = new OctavePerlinNoiseSampler(rand, 1);
 		assertEquals(0.10709059654197703, perlinNoiseSampler.sample(0, 0, 0));
 	}
@@ -23,13 +24,13 @@ public class NoiseTest {
 	@Test
 	@DisplayName("Test Perlin Octaves noise")
 	public void testPerlinOctaves() {
-		ChunkRand rand = new ChunkRand(1L);
+		JRand rand = new JRand(1L);
 		OctavePerlinNoiseSampler perlinNoiseSampler = new OctavePerlinNoiseSampler(rand, Arrays.stream(new int[] {1, 2}));
 		double score = 0.0D;
 		int bound = 100;
-		for (int x = 0; x < bound; x++) {
-			for (int y = 0; y < bound; y++) {
-				for (int z = 0; z < bound; z++) {
+		for(int x = 0; x < bound; x++) {
+			for(int y = 0; y < bound; y++) {
+				for(int z = 0; z < bound; z++) {
 					score += perlinNoiseSampler.sample(x, y, z);
 				}
 			}
@@ -41,7 +42,7 @@ public class NoiseTest {
 	@Test
 	@DisplayName("Test Simplex noise")
 	public void testSimplex() {
-		ChunkRand rand = new ChunkRand(12);
+		JRand rand = new JRand(12);
 		SimplexNoiseSampler simplexNoiseSampler = new SimplexNoiseSampler(rand);
 		assertEquals(0.8331228771221665, simplexNoiseSampler.sample2D(0.5, 100));
 		assertEquals(-0.047980544000000055, simplexNoiseSampler.sample3D(0.5, 0.6, 100.0));
@@ -50,12 +51,12 @@ public class NoiseTest {
 	@Test
 	@DisplayName("Test Simplex Octaves noise")
 	public void testSimplexOctaves() {
-		ChunkRand rand = new ChunkRand(1L);
+		JRand rand = new JRand(1L);
 		OctaveSimplexNoiseSampler octaveSimplexNoiseSampler = new OctaveSimplexNoiseSampler(rand, 2);
 		double score = 0.0D;
 		int bound = 100;
-		for (int x = 0; x < bound; x++) {
-			for (int y = 0; y < bound; y++) {
+		for(int x = 0; x < bound; x++) {
+			for(int y = 0; y < bound; y++) {
 				score += octaveSimplexNoiseSampler.sample(x, y);
 			}
 		}

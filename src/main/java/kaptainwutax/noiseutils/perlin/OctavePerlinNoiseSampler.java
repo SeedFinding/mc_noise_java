@@ -1,7 +1,6 @@
 package kaptainwutax.noiseutils.perlin;
 
 
-import kaptainwutax.mcutils.rand.ChunkRand;
 import kaptainwutax.mcutils.util.data.Pair;
 import kaptainwutax.mcutils.util.data.Quad;
 import kaptainwutax.noiseutils.noise.NoiseSampler;
@@ -23,7 +22,7 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 	public OctavePerlinNoiseSampler(JRand random, int octaveCount) {
 		this.amplitudes = null;
 		this.octaveSamplers = new PerlinNoiseSampler[octaveCount];
-		for (int i = 0; i < octaveCount; i++) {
+		for(int i = 0; i < octaveCount; i++) {
 			this.octaveSamplers[i] = new PerlinNoiseSampler(random);
 		}
 		this.lacunarity = 1.0;
@@ -34,7 +33,7 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 		return this.octaveSamplers.length;
 	}
 
-	public OctavePerlinNoiseSampler(ChunkRand rand, IntStream octaves) {
+	public OctavePerlinNoiseSampler(JRand rand, IntStream octaves) {
 		this(rand, octaves.boxed().collect(Collectors.toList()));
 	}
 
@@ -42,30 +41,30 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 		Quad<Integer, Integer, Integer, List<Integer>> processedOctaves = processOctaves(octaves);
 		int start = processedOctaves.getFirst();
 		List<Double> octavePlaces = new ArrayList<>();
-		for (int octave : processedOctaves.getFourth()) {
+		for(int octave : processedOctaves.getFourth()) {
 			octavePlaces.set(octave + start, 1.0D);
 		}
 		return new Pair<>(start, octavePlaces);
 	}
 
-	public OctavePerlinNoiseSampler(ChunkRand rand, Pair<Integer, List<Double>> octaveParams) {
+	public OctavePerlinNoiseSampler(JRand rand, Pair<Integer, List<Double>> octaveParams) {
 		// this is for 1.16.2+ nether
 		this.amplitudes = octaveParams.getSecond();
 		PerlinNoiseSampler perlin = new PerlinNoiseSampler(rand);
 		int length = this.amplitudes.size();
 		int start = octaveParams.getFirst();
 		this.octaveSamplers = new PerlinNoiseSampler[length];
-		if (start >= 0 && start < length) {
+		if(start >= 0 && start < length) {
 			double d0 = this.amplitudes.get(start);
-			if (d0 != 0.0D) {
+			if(d0 != 0.0D) {
 				this.octaveSamplers[start] = perlin;
 			}
 		}
 
-		for (int idx = start - 1; idx >= 0; --idx) {
-			if (idx < length) {
+		for(int idx = start - 1; idx >= 0; --idx) {
+			if(idx < length) {
 				double d1 = this.amplitudes.get(idx);
-				if (d1 != 0.0D) {
+				if(d1 != 0.0D) {
 					this.octaveSamplers[idx] = new PerlinNoiseSampler(rand);
 				} else {
 					rand.advance(SKIP_262);
@@ -75,14 +74,14 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 			}
 		}
 
-		if (start < length - 1) {
-			long noiseSeed = (long) (perlin.sample(0.0D, 0.0D, 0.0D, 0.0D, 0.0D) * (double) 9.223372E18F);
+		if(start < length - 1) {
+			long noiseSeed = (long)(perlin.sample(0.0D, 0.0D, 0.0D, 0.0D, 0.0D) * (double)9.223372E18F);
 			rand.setSeed(noiseSeed);
 
-			for (int l = start + 1; l < length; ++l) {
-				if (l >= 0) {
+			for(int l = start + 1; l < length; ++l) {
+				if(l >= 0) {
 					double d2 = this.amplitudes.get(l);
-					if (d2 != 0.0D) {
+					if(d2 != 0.0D) {
 						this.octaveSamplers[l] = new PerlinNoiseSampler(rand);
 					} else {
 						rand.advance(SKIP_262);
@@ -100,20 +99,20 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 	private static Quad<Integer, Integer, Integer, List<Integer>> processOctaves(List<Integer> octaves) {
 		octaves = octaves.stream().sorted(Integer::compareTo).collect(Collectors.toList());
 
-		if (octaves.isEmpty()) {
+		if(octaves.isEmpty()) {
 			throw new IllegalArgumentException("Need some octaves!");
 		}
 
 		int start = -octaves.get(0);
 		int end = octaves.get(octaves.size() - 1);
 		int length = start + end + 1;
-		if (length < 1) {
+		if(length < 1) {
 			throw new IllegalArgumentException("Total number of octaves needs to be >= 1");
 		}
 		return new Quad<>(start, end, length, octaves);
 	}
 
-	public OctavePerlinNoiseSampler(ChunkRand rand, List<Integer> octaves) {
+	public OctavePerlinNoiseSampler(JRand rand, List<Integer> octaves) {
 		// this is the old method
 		this.amplitudes = null;
 
@@ -125,23 +124,23 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 
 		this.octaveSamplers = new PerlinNoiseSampler[length];
 
-		if (end >= 0 && end < length && octaves.contains(0)) {
+		if(end >= 0 && end < length && octaves.contains(0)) {
 			this.octaveSamplers[end] = perlin;
 		}
 
-		for (int idx = end + 1; idx < length; ++idx) {
-			if (idx >= 0 && octaves.contains(end - idx)) {
+		for(int idx = end + 1; idx < length; ++idx) {
+			if(idx >= 0 && octaves.contains(end - idx)) {
 				this.octaveSamplers[idx] = new PerlinNoiseSampler(rand);
 			} else {
 				rand.advance(SKIP_262);
 			}
 		}
 
-		if (end > 0) {
-			long noiseSeed = (long) (perlin.sample(0.0D, 0.0D, 0.0D, 0.0D, 0.0D) * 9.223372036854776E18D);
+		if(end > 0) {
+			long noiseSeed = (long)(perlin.sample(0.0D, 0.0D, 0.0D, 0.0D, 0.0D) * 9.223372036854776E18D);
 			rand.setSeed(noiseSeed);
-			for (int index = end - 1; index >= 0; --index) {
-				if (index < length && octaves.contains(end - index)) {
+			for(int index = end - 1; index >= 0; --index) {
+				if(index < length && octaves.contains(end - index)) {
 					this.octaveSamplers[index] = new PerlinNoiseSampler(rand);
 				} else {
 					rand.advance(SKIP_262);
@@ -164,14 +163,14 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 		// distance between octaves, increased for each by a factor of 2
 		double lacunarity = this.lacunarity;
 
-		for (int idx = 0; idx < this.octaveSamplers.length; idx++) {
+		for(int idx = 0; idx < this.octaveSamplers.length; idx++) {
 			PerlinNoiseSampler sampler = this.octaveSamplers[idx];
-			if (sampler != null) {
+			if(sampler != null) {
 				double sample = sampler.sample(maintainPrecision(x * persistence),
-						useDefaultY ? -sampler.originY : maintainPrecision(y * persistence),
-						maintainPrecision(z * persistence),
-						yAmplification * persistence,
-						minY * persistence) * lacunarity;
+					useDefaultY ? -sampler.originY : maintainPrecision(y * persistence),
+					maintainPrecision(z * persistence),
+					yAmplification * persistence,
+					minY * persistence) * lacunarity;
 				noise += (this.amplitudes != null ? this.amplitudes.get(idx) : 1.0D) * sample;
 			}
 			persistence /= 2.0D;
