@@ -1,9 +1,8 @@
 package com.seedfinding.mcnoise.noise;
 
-
-import kaptainwutax.mcutils.util.data.Pair;
+import com.seedfinding.mccore.util.data.Pair;
 import com.seedfinding.mcnoise.perlin.OctavePerlinNoiseSampler;
-import kaptainwutax.seedutils.rand.JRand;
+import com.seedfinding.mcseed.rand.JRand;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,7 +1,7 @@
 package com.seedfinding.mcnoise.noise;
 
 
-import kaptainwutax.seedutils.rand.JRand;
+import com.seedfinding.mcseed.rand.JRand;
 
 public class Noise {
 	public final double originX;

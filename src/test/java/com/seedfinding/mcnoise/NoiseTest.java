@@ -4,7 +4,7 @@ package com.seedfinding.mcnoise;
 import com.seedfinding.mcnoise.perlin.OctavePerlinNoiseSampler;
 import com.seedfinding.mcnoise.simplex.OctaveSimplexNoiseSampler;
 import com.seedfinding.mcnoise.simplex.SimplexNoiseSampler;
-import kaptainwutax.seedutils.rand.JRand;
+import com.seedfinding.mcseed.rand.JRand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

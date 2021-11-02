@@ -1,6 +1,6 @@
 package com.seedfinding.mcnoise.noise;
 
-import kaptainwutax.seedutils.lcg.LCG;
+import com.seedfinding.mcseed.lcg.LCG;
 
 public interface NoiseSampler {
 	LCG SKIP_262 = LCG.JAVA.combine(262);

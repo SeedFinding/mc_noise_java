@@ -1,11 +1,11 @@
 package com.seedfinding.mcnoise.perlin;
 
 
+import com.seedfinding.mccore.util.data.Pair;
+import com.seedfinding.mccore.util.data.Quad;
 import com.seedfinding.mcnoise.noise.NoiseSampler;
 import com.seedfinding.mcnoise.utils.MathHelper;
-import kaptainwutax.mcutils.util.data.Pair;
-import kaptainwutax.mcutils.util.data.Quad;
-import kaptainwutax.seedutils.rand.JRand;
+import com.seedfinding.mcseed.rand.JRand;
 
 import java.util.ArrayList;
 import java.util.List;

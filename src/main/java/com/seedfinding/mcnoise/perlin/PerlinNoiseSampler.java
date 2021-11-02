@@ -1,8 +1,8 @@
 package com.seedfinding.mcnoise.perlin;
 
-import kaptainwutax.mcutils.util.data.Triplet;
+import com.seedfinding.mccore.util.data.Triplet;
 import com.seedfinding.mcnoise.noise.Noise;
-import kaptainwutax.seedutils.rand.JRand;
+import com.seedfinding.mcseed.rand.JRand;
 
 import static com.seedfinding.mcnoise.utils.MathHelper.floor;
 import static com.seedfinding.mcnoise.utils.MathHelper.grad;
