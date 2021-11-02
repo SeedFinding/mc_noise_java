@@ -1,9 +1,9 @@
-package kaptainwutax;
+package com.seedfinding.mcnoise;
 
 
-import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
-import kaptainwutax.noiseutils.simplex.OctaveSimplexNoiseSampler;
-import kaptainwutax.noiseutils.simplex.SimplexNoiseSampler;
+import com.seedfinding.mcnoise.perlin.OctavePerlinNoiseSampler;
+import com.seedfinding.mcnoise.simplex.OctaveSimplexNoiseSampler;
+import com.seedfinding.mcnoise.simplex.SimplexNoiseSampler;
 import kaptainwutax.seedutils.rand.JRand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

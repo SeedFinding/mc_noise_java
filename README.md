@@ -1,4 +1,4 @@
-# NoiseUtils
+# Minecraft Noise
 
 An efficient library to simulate Perlin and Simplex Noise as used in Minecraft.
 

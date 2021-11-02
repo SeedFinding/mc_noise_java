@@ -1,13 +1,13 @@
-package kaptainwutax.noiseutils.perlin;
+package com.seedfinding.mcnoise.perlin;
 
 import kaptainwutax.mcutils.util.data.Triplet;
-import kaptainwutax.noiseutils.noise.Noise;
+import com.seedfinding.mcnoise.noise.Noise;
 import kaptainwutax.seedutils.rand.JRand;
 
-import static kaptainwutax.noiseutils.utils.MathHelper.floor;
-import static kaptainwutax.noiseutils.utils.MathHelper.grad;
-import static kaptainwutax.noiseutils.utils.MathHelper.lerp3;
-import static kaptainwutax.noiseutils.utils.MathHelper.smoothStep;
+import static com.seedfinding.mcnoise.utils.MathHelper.floor;
+import static com.seedfinding.mcnoise.utils.MathHelper.grad;
+import static com.seedfinding.mcnoise.utils.MathHelper.lerp3;
+import static com.seedfinding.mcnoise.utils.MathHelper.smoothStep;
 
 public class PerlinNoiseSampler extends Noise {
 

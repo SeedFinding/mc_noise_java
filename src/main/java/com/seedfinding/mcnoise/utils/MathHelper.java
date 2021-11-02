@@ -1,4 +1,4 @@
-package kaptainwutax.noiseutils.utils;
+package com.seedfinding.mcnoise.utils;
 
 public class MathHelper {
 	public static final int[][] GRADIENTS = new int[][] {

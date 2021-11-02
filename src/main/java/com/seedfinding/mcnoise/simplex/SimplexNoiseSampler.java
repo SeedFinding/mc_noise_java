@@ -1,10 +1,10 @@
-package kaptainwutax.noiseutils.simplex;
+package com.seedfinding.mcnoise.simplex;
 
-import kaptainwutax.noiseutils.noise.Noise;
+import com.seedfinding.mcnoise.noise.Noise;
 import kaptainwutax.seedutils.rand.JRand;
 
-import static kaptainwutax.noiseutils.utils.MathHelper.floor;
-import static kaptainwutax.noiseutils.utils.MathHelper.grad;
+import static com.seedfinding.mcnoise.utils.MathHelper.floor;
+import static com.seedfinding.mcnoise.utils.MathHelper.grad;
 
 public class SimplexNoiseSampler extends Noise {
 

@@ -1,7 +1,7 @@
-package kaptainwutax.noiseutils.simplex;
+package com.seedfinding.mcnoise.simplex;
 
 
-import kaptainwutax.noiseutils.noise.NoiseSampler;
+import com.seedfinding.mcnoise.noise.NoiseSampler;
 import kaptainwutax.seedutils.rand.JRand;
 
 import java.util.List;

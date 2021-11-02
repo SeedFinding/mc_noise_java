@@ -1,8 +1,8 @@
-package kaptainwutax.noiseutils.noise;
+package com.seedfinding.mcnoise.noise;
 
 
 import kaptainwutax.mcutils.util.data.Pair;
-import kaptainwutax.noiseutils.perlin.OctavePerlinNoiseSampler;
+import com.seedfinding.mcnoise.perlin.OctavePerlinNoiseSampler;
 import kaptainwutax.seedutils.rand.JRand;
 
 import java.util.List;

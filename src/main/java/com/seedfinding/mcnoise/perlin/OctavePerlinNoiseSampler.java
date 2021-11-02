@@ -1,17 +1,16 @@
-package kaptainwutax.noiseutils.perlin;
+package com.seedfinding.mcnoise.perlin;
 
 
+import com.seedfinding.mcnoise.noise.NoiseSampler;
+import com.seedfinding.mcnoise.utils.MathHelper;
 import kaptainwutax.mcutils.util.data.Pair;
 import kaptainwutax.mcutils.util.data.Quad;
-import kaptainwutax.noiseutils.noise.NoiseSampler;
 import kaptainwutax.seedutils.rand.JRand;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static kaptainwutax.noiseutils.utils.MathHelper.maintainPrecision;
 
 public class OctavePerlinNoiseSampler implements NoiseSampler {
 	public final double lacunarity;
@@ -166,9 +165,9 @@ public class OctavePerlinNoiseSampler implements NoiseSampler {
 		for(int idx = 0; idx < this.octaveSamplers.length; idx++) {
 			PerlinNoiseSampler sampler = this.octaveSamplers[idx];
 			if(sampler != null) {
-				double sample = sampler.sample(maintainPrecision(x * persistence),
-					useDefaultY ? -sampler.originY : maintainPrecision(y * persistence),
-					maintainPrecision(z * persistence),
+				double sample = sampler.sample(MathHelper.maintainPrecision(x * persistence),
+					useDefaultY ? -sampler.originY : MathHelper.maintainPrecision(y * persistence),
+					MathHelper.maintainPrecision(z * persistence),
 					yAmplification * persistence,
 					minY * persistence) * lacunarity;
 				noise += (this.amplitudes != null ? this.amplitudes.get(idx) : 1.0D) * sample;

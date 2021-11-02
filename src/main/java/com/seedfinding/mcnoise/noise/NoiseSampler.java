@@ -1,4 +1,4 @@
-package kaptainwutax.noiseutils.noise;
+package com.seedfinding.mcnoise.noise;
 
 import kaptainwutax.seedutils.lcg.LCG;
 
