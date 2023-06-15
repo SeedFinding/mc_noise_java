@@ -1,3 +1,5 @@
+[![Build Status](https://jenkins.seedfinding.com/buildStatus/icon?job=mc_java%2Fmc_noise_java)](https://jenkins.seedfinding.com/job/mc_java/job/mc_noise_java/)
+
 # Minecraft Noise
 
 An efficient library to simulate Perlin and Simplex Noise as used in Minecraft.
